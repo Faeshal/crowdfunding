@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"crowdfunding/auth"
 	"crowdfunding/handler"
 	"crowdfunding/user"
 
@@ -21,9 +22,15 @@ func main() {
 	log.Print("DB Connected...")
 
 	// * Declare Global Dependency
+	// repository
 	userRepository := user.NewRepository(db)
+
+	//  service
 	userService := user.NewService(userRepository)
-	userHandler := handler.NewUserHandler(userService)
+	authService := auth.NewService()
+
+	//  Handler
+	userHandler := handler.NewUserHandler(userService, authService)
 
 	// * route
 	router := gin.Default()
