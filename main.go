@@ -28,6 +28,7 @@ func main() {
 	// * Declare Global Dependency
 	// repository
 	userRepository := user.NewRepository(db)
+	// campaignRepository := campaign.NewRepository(db)
 
 	//  service
 	userService := user.NewService(userRepository)
