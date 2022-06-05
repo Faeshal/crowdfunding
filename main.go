@@ -43,6 +43,13 @@ func main() {
 	// * route
 	router := gin.Default()
 	router.Static("/images", "./images")
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "welcome to GIN 🍹",
+		})
+	})
+
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
