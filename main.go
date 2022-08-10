@@ -69,9 +69,10 @@ func main() {
 
 	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransactions)
 	api.GET("/transactions", authMiddleware(authService, userService), transactionHandler.GetUserTransactions)
+	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
 
 	// * Run Gin
-	router.Run()
+	router.Run(":7070")
 }
 
 func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {

@@ -12,6 +12,8 @@ require (
 	gorm.io/gorm v1.23.5
 )
 
+require golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
