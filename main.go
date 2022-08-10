@@ -9,6 +9,7 @@ import (
 	"crowdfunding/campaign"
 	"crowdfunding/handler"
 	"crowdfunding/helper"
+	"crowdfunding/payment"
 	"crowdfunding/transaction"
 	"crowdfunding/user"
 
@@ -36,8 +37,9 @@ func main() {
 	//  service
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
+	paymentService := payment.NewService()
 	campaignService := campaign.NewService(campaignRepository)
-	transactionService := transaction.NewService(transactionRepository, campaignRepository)
+	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 
 	//  Handler
 	userHandler := handler.NewUserHandler(userService, authService)

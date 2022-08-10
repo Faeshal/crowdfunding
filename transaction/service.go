@@ -2,13 +2,14 @@ package transaction
 
 import (
 	"crowdfunding/campaign"
+	"crowdfunding/payment"
 	"errors"
-	"fmt"
 )
 
 type service struct {
 	repository         Repository
 	campaignRepository campaign.Repository
+	paymentService     payment.Service
 }
 
 type Service interface {
@@ -17,8 +18,8 @@ type Service interface {
 	CreateTransaction(input CreateTransactionInput) (Transaction, error)
 }
 
-func NewService(repository Repository, campaignRepository campaign.Repository) *service {
-	return &service{repository, campaignRepository}
+func NewService(repository Repository, campaignRepository campaign.Repository, paymentService payment.Service) *service {
+	return &service{repository, campaignRepository, paymentService}
 }
 
 func (s *service) GetTransactionsByCampaignID(input GetCampaignTransactionsInput) ([]Transaction, error) {
@@ -55,9 +56,27 @@ func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, 
 	transaction.UserID = input.User.ID
 	transaction.Status = "pending"
 
-	fmt.Println(transaction)
-
+	// * create new transaction
 	newTransaction, err := s.repository.Save(transaction)
+	if err != nil {
+		return newTransaction, err
+	}
+
+	paymentTransacation := payment.Transaction{
+		ID:     newTransaction.ID,
+		Amount: newTransaction.Amount,
+	}
+
+	// * call midtrans service
+	paymentURL, err := s.paymentService.GetPaymentURL(paymentTransacation, input.User)
+	if err != nil {
+		return newTransaction, err
+	}
+
+	newTransaction.PaymentURL = paymentURL
+
+	// * update payment url into transaction table
+	newTransaction, err = s.repository.Update(newTransaction)
 	if err != nil {
 		return newTransaction, err
 	}
