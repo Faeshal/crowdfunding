@@ -14,6 +14,8 @@ import (
 	"crowdfunding/transaction"
 	"crowdfunding/user"
 
+	"path/filepath"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,7 +25,7 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
+	err := godotenv.Load(filepath.Join("./", ".env"))
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
