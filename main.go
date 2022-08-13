@@ -32,7 +32,7 @@ func main() {
 
 	// * load .env file
 	// err := godotenv.Load(string(rootPath) + `/.env`)
-	err = godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
+	err := godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
