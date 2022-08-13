@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"regexp"
+	"path/filepath"
 	"strings"
 
 	"crowdfunding/auth"
@@ -25,13 +25,14 @@ import (
 
 func main() {
 	// * dynamic env path finder
-	const projectDirName = "crowdfunding"
-	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	currentWorkDirectory, _ := os.Getwd()
-	rootPath := projectName.Find([]byte(currentWorkDirectory))
+	// const projectDirName = "crowdfunding"
+	// projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
+	// currentWorkDirectory, _ := os.Getwd()
+	// rootPath := projectName.Find([]byte(currentWorkDirectory))
 
 	// * load .env file
-	err := godotenv.Load(string(rootPath) + `/.env`)
+	// err := godotenv.Load(string(rootPath) + `/.env`)
+	err = godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
