@@ -80,7 +80,7 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  200,
-			"message": "welcome to GIN 🍹",
+			"message": "Welcome to Crowdfunding Service build on top of GIN 🍹",
 		})
 	})
 
