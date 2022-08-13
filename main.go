@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	log.Print("DB Connected...")
+	log.Print("DB Connected 🚀...")
 
 	// * Declare Global Dependency
 	// repository
