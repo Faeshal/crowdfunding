@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"crowdfunding/auth"
@@ -15,8 +16,13 @@ import (
 	"crowdfunding/transaction"
 	"crowdfunding/user"
 
+	webHandler "crowdfunding/web/handler"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/multitemplate"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -25,14 +31,14 @@ import (
 
 func main() {
 	// * dynamic env path finder
-	// const projectDirName = "crowdfunding"
-	// projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	// currentWorkDirectory, _ := os.Getwd()
-	// rootPath := projectName.Find([]byte(currentWorkDirectory))
+	const projectDirName = "crowdfunding"
+	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
+	currentWorkDirectory, _ := os.Getwd()
+	rootPath := projectName.Find([]byte(currentWorkDirectory))
 
 	// * load .env file
-	// err := godotenv.Load(string(rootPath) + `/.env`)
-	err := godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
+	err := godotenv.Load(string(rootPath) + `/.env`)
+	// err := godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -45,46 +51,52 @@ func main() {
 	dsn := DB_USERNAME + ":" + DB_PASSWORD + "@tcp(127.0.0.1:3306)/" + DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
+	// * auto sync
+	db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}, &payment.Transaction{})
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	log.Print("DB Connected 🚀...")
 
-	// * Declare Global Dependency
-	// repository
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
 	transactionRepository := transaction.NewRepository(db)
 
-	// service
 	userService := user.NewService(userRepository)
+	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
 	paymentService := payment.NewService()
-	campaignService := campaign.NewService(campaignRepository)
 	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 
-	// handler
 	userHandler := handler.NewUserHandler(userService, authService)
 	campaignHandler := handler.NewCampaignHandler(campaignService)
 	transactionHandler := handler.NewTransactionHandler(transactionService)
 
-	// * server init
-	router := gin.Default()
+	userWebHandler := webHandler.NewUserHandler(userService)
+	campaignWebHanlder := webHandler.NewCampaignHandler(campaignService, userService)
+	transactionWebHandler := webHandler.NewTransactionHandler(transactionService)
+	sessionWebHandler := webHandler.NewSessionHandler(userService)
 
-	// * cors
+	router := gin.Default()
 	router.Use(cors.Default())
 
-	// * static file
-	router.Static("/images", "./images")
+	cookieStore := cookie.NewStore([]byte(auth.SECRET_KEY))
+	router.Use(sessions.Sessions("bwastartup", cookieStore))
 
-	// * route
+	router.HTMLRender = loadTemplates("./web/templates")
+
+	router.Static("/images", "./images")
+	router.Static("/css", "./web/assets/css")
+	router.Static("/js", "./web/assets/js")
+	router.Static("/webfonts", "./web/assets/webfonts")
+
+	// * API route
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  200,
-			"message": "Welcome to Crowdfunding Service build on top of GIN 🍹",
+			"message": "Welcome to Crowdfunding API 🍹",
 		})
 	})
-
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
@@ -104,7 +116,28 @@ func main() {
 	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
 	api.POST("/transactions/notification", transactionHandler.GetNotification)
 
-	// * Run Gin
+	router.GET("/users", authAdminMiddleware(), userWebHandler.Index)
+	router.GET("/users/new", userWebHandler.New)
+	router.POST("/users", userWebHandler.Create)
+	router.GET("/users/edit/:id", userWebHandler.Edit)
+	router.POST("/users/update/:id", authAdminMiddleware(), userWebHandler.Update)
+	router.GET("/users/avatar/:id", authAdminMiddleware(), userWebHandler.NewAvatar)
+	router.POST("/users/avatar/:id", authAdminMiddleware(), userWebHandler.CreateAvatar)
+
+	router.GET("/campaigns", authAdminMiddleware(), campaignWebHanlder.Index)
+	router.GET("/campaigns/new", authAdminMiddleware(), campaignWebHanlder.New)
+	router.POST("/campaigns", authAdminMiddleware(), campaignWebHanlder.Create)
+	router.GET("/campaigns/image/:id", authAdminMiddleware(), campaignWebHanlder.NewImage)
+	router.POST("/campaigns/image/:id", authAdminMiddleware(), campaignWebHanlder.CreateImage)
+	router.GET("/campaigns/edit/:id", authAdminMiddleware(), campaignWebHanlder.Edit)
+	router.POST("/campaigns/update/:id", authAdminMiddleware(), campaignWebHanlder.Update)
+	router.GET("/campaigns/show/:id", authAdminMiddleware(), campaignWebHanlder.Show)
+	router.GET("/transactions", authAdminMiddleware(), transactionWebHandler.Index)
+
+	router.GET("/login", sessionWebHandler.New)
+	router.POST("/session", sessionWebHandler.Create)
+	router.GET("/logout", sessionWebHandler.Destroy)
+
 	router.Run(":7070")
 }
 
@@ -139,7 +172,6 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 			return
 		}
 
-		// karena id kita typenya integer , maka perlu di ubah dari string, float ke int lagi
 		userID := int(claim["user_id"].(float64))
 
 		user, err := userService.GetUserByID(userID)
@@ -151,4 +183,39 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 
 		c.Set("currentUser", user)
 	}
+}
+
+func authAdminMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+
+		userIDSession := session.Get("userID")
+
+		if userIDSession == nil {
+			c.Redirect(http.StatusFound, "/login")
+			return
+		}
+	}
+}
+
+func loadTemplates(templatesDir string) multitemplate.Renderer {
+	r := multitemplate.NewRenderer()
+
+	layouts, err := filepath.Glob(templatesDir + "/layouts/*")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	includes, err := filepath.Glob(templatesDir + "/**/*")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for _, include := range includes {
+		layoutCopy := make([]string, len(layouts))
+		copy(layoutCopy, layouts)
+		files := append(layoutCopy, include)
+		r.AddFromFiles(filepath.Base(include), files...)
+	}
+	return r
 }

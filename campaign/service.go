@@ -15,23 +15,21 @@ type Service interface {
 	SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error)
 }
 
-// * butuh dependecy ke repository
 type service struct {
 	repository Repository
 }
 
-// * supaya bisa di call dari luar package
 func NewService(repository Repository) *service {
 	return &service{repository}
 }
 
 func (s *service) GetCampaigns(userID int) ([]Campaign, error) {
-
 	if userID != 0 {
 		campaigns, err := s.repository.FindByUserID(userID)
 		if err != nil {
 			return campaigns, err
 		}
+
 		return campaigns, nil
 	}
 
@@ -39,20 +37,22 @@ func (s *service) GetCampaigns(userID int) ([]Campaign, error) {
 	if err != nil {
 		return campaigns, err
 	}
+
 	return campaigns, nil
 }
 
 func (s *service) GetCampaignByID(input GetCampaignDetailInput) (Campaign, error) {
 	campaign, err := s.repository.FindByID(input.ID)
+
 	if err != nil {
 		return campaign, err
 	}
+
 	return campaign, nil
 }
 
 func (s *service) CreateCampaign(input CreateCampaignInput) (Campaign, error) {
 	campaign := Campaign{}
-
 	campaign.Name = input.Name
 	campaign.ShortDescription = input.ShortDescription
 	campaign.Description = input.Description
@@ -60,14 +60,14 @@ func (s *service) CreateCampaign(input CreateCampaignInput) (Campaign, error) {
 	campaign.GoalAmount = input.GoalAmount
 	campaign.UserID = input.User.ID
 
-	// pembuatan slug
 	slugCandidate := fmt.Sprintf("%s %d", input.Name, input.User.ID)
-	campaign.Slug = slug.Make(slugCandidate) // string url akan jadi: nama-campaign-userId
+	campaign.Slug = slug.Make(slugCandidate)
 
 	newCampaign, err := s.repository.Save(campaign)
 	if err != nil {
 		return newCampaign, err
 	}
+
 	return newCampaign, nil
 }
 
@@ -78,7 +78,7 @@ func (s *service) UpdateCampaign(inputID GetCampaignDetailInput, inputData Creat
 	}
 
 	if campaign.UserID != inputData.User.ID {
-		return campaign, errors.New("not an owner of the campaign")
+		return campaign, errors.New("Not an owner of the campaign")
 	}
 
 	campaign.Name = inputData.Name
@@ -102,7 +102,7 @@ func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation
 	}
 
 	if campaign.UserID != input.User.ID {
-		return CampaignImage{}, errors.New("not an owner of the campaign")
+		return CampaignImage{}, errors.New("Not an owner of the campaign")
 	}
 
 	isPrimary := 0

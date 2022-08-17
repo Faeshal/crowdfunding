@@ -2,7 +2,6 @@ package campaign
 
 import "strings"
 
-// * All Campaigns
 type CampaignFormatter struct {
 	ID               int    `json:"id"`
 	UserID           int    `json:"user_id"`
@@ -43,7 +42,6 @@ func FormatCampaigns(campaigns []Campaign) []CampaignFormatter {
 	return campaignsFormatter
 }
 
-// * Detail Campaign
 type CampaignDetailFormatter struct {
 	ID               int                      `json:"id"`
 	Name             string                   `json:"name"`

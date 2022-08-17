@@ -59,12 +59,16 @@ func (h *transactionHandler) GetUserTransactions(c *gin.Context) {
 
 func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	var input transaction.CreateTransactionInput
+
 	err := c.ShouldBindJSON(&input)
+
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		errorMessage := gin.H{"errors": errors}
+
 		response := helper.APIResponse("Failed to create transaction", http.StatusUnprocessableEntity, "error", errorMessage)
 		c.JSON(http.StatusUnprocessableEntity, response)
+
 		return
 	}
 
@@ -77,6 +81,7 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	if err != nil {
 		response := helper.APIResponse("Failed to create transaction", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
+
 		return
 	}
 

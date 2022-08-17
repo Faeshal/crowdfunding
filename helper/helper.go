@@ -8,7 +8,7 @@ type Response struct {
 }
 
 type Meta struct {
-	Message string `json:"meta"`
+	Message string `json:"message"`
 	Code    int    `json:"code"`
 	Status  string `json:"status"`
 }
@@ -24,6 +24,7 @@ func APIResponse(message string, code int, status string, data interface{}) Resp
 		Meta: meta,
 		Data: data,
 	}
+
 	return jsonResponse
 }
 
