@@ -1,10 +1,10 @@
 ## Architecture
 
-REST API for crowdfunding system build on top of Golang with Gin Framework, MYSQL DB with GORM ORM integrated with [Midtrans](https://midtrans.com/) as payment gateway.
+REST API for crowdfunding system build on top of Golang with [Gin](https://gin-gonic.com/) Framework, MYSQL Database combine with [GORM ORM](https://gorm.io/index.html) and integrated with [Midtrans](https://midtrans.com/) as payment gateway.
 
 ## Objective ⭐
 
-Simple Crowdfunding platforms that enable interaction between fundraisers and the crowd. Financial pledges can be made and collected through the crowdfunding platform.
+Simple Crowdfunding platforms that enable interaction between fundraisers and the crowd. Funders can give funds to the project they want to help and fundraisers can explain what benefits the funder will get if the project is successful.
 
 ## ERD 🍃
 
