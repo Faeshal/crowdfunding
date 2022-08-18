@@ -28,23 +28,7 @@ import (
 )
 
 func main() {
-	// * dynamic env path finder
-	// const projectDirName = "crowdfunding"
-	// projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	// currentWorkDirectory, _ := os.Getwd()
-	// rootPath := projectName.Find([]byte(currentWorkDirectory))
-
-	// * load .env file
-	// err := godotenv.Load(string(rootPath) + `/.env`)
-	// // err := godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
-	// if err != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
-
-	// DB_USERNAME := os.Getenv("DB_USERNAME")
-	// DB_PASSWORD := os.Getenv("DB_PASSWORD")
-	// DB_NAME := os.Getenv("DB_NAME")
-
+	// * load env
 	viper.SetConfigFile(".env")
 	err := viper.ReadInConfig()
 	if err != nil {

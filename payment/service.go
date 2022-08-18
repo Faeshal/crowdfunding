@@ -21,8 +21,6 @@ func NewService() *service {
 
 func (s *service) GetPaymentURL(transaction Transaction, user user.User) (string, error) {
 	midclient := midtrans.NewClient()
-	// midclient.ServerKey = os.Getenv("MIDTRANS_SERVER_KEY")
-	// midclient.ClientKey = os.Getenv("MIDTRANS_CLIENT_KEY")
 	midclient.ServerKey = viper.Get("MIDTRANS_SERVER_KEY").(string)
 	midclient.ClientKey = viper.Get("MIDTRANS_CLIENT_KEY").(string)
 	midclient.APIEnvType = midtrans.Sandbox
