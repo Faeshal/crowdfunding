@@ -92,6 +92,13 @@ func main() {
 			"message": "Welcome to Crowdfunding API 🍹",
 		})
 	})
+
+	router.GET("/api/v1/status", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "up & running",
+		})
+	})
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
