@@ -3,9 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	"crowdfunding/auth"
@@ -24,32 +22,45 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func main() {
 	// * dynamic env path finder
-	const projectDirName = "crowdfunding"
-	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	currentWorkDirectory, _ := os.Getwd()
-	rootPath := projectName.Find([]byte(currentWorkDirectory))
+	// const projectDirName = "crowdfunding"
+	// projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
+	// currentWorkDirectory, _ := os.Getwd()
+	// rootPath := projectName.Find([]byte(currentWorkDirectory))
 
 	// * load .env file
-	err := godotenv.Load(string(rootPath) + `/.env`)
-	// err := godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
+	// err := godotenv.Load(string(rootPath) + `/.env`)
+	// // err := godotenv.Load(filepath.Join("/var/www/crowdfunding", ".env"))
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
+
+	// DB_USERNAME := os.Getenv("DB_USERNAME")
+	// DB_PASSWORD := os.Getenv("DB_PASSWORD")
+	// DB_NAME := os.Getenv("DB_NAME")
+
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf("Error while reading config file %s", err)
 	}
 
-	DB_USERNAME := os.Getenv("DB_USERNAME")
-	DB_PASSWORD := os.Getenv("DB_PASSWORD")
-	DB_NAME := os.Getenv("DB_NAME")
+	DB_USERNAME := viper.Get("DB_USERNAME").(string)
+	DB_PASSWORD := viper.Get("DB_PASSWORD").(string)
+	DB_NAME := viper.Get("DB_NAME").(string)
 
 	// dsn := "root:root@tcp(127.0.0.1:3306)/crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := DB_USERNAME + ":" + DB_PASSWORD + "@tcp(127.0.0.1:3306)/" + DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
 	// * auto sync
 	db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}, &payment.Transaction{})
