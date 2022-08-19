@@ -39,7 +39,6 @@ func main() {
 	DB_PASSWORD := viper.Get("DB_PASSWORD").(string)
 	DB_NAME := viper.Get("DB_NAME").(string)
 
-	// dsn := "root:root@tcp(127.0.0.1:3306)/crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := DB_USERNAME + ":" + DB_PASSWORD + "@tcp(127.0.0.1:3306)/" + DB_NAME + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -47,7 +46,7 @@ func main() {
 	}
 
 	// * auto sync
-	db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}, &payment.Transaction{})
+	db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}, &transaction.Transaction{})
 	if err != nil {
 		log.Fatal(err.Error())
 	}
