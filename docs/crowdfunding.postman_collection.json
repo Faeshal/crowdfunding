@@ -1,0 +1,1163 @@
+{
+	"info": {
+		"_postman_id": "35c97544-0744-4877-aeb4-69a4d1e9e5fb",
+		"name": "crowdfunding",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9427336"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var res = pm.response.json();",
+									"pm.environment.set('token', res.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"name\":\"jaka\",\n     \"occupation\":\"jakarta\",\n     \"email\":\"jaka@mail.com\",\n     \"password\":\"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"name\":\"farhana\",\n     \"occupation\":\"bali\",\n     \"email\":\"farhana@mail.com\",\n     \"password\":\"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/users",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Jun 2022 04:00:02 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "252"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"meta\": \"user created\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 5,\n        \"name\": \"farhana\",\n        \"occupation\": \"bali\",\n        \"email\": \"farhana@mail.com\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1fQ.8cfLZ-lWx-zb7bP-dgSh03OoI4dafd3eHpXxVYEglNo\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var res = pm.response.json();",
+									"pm.environment.set('token', res.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"email\":\"jaka@mail.com\",\n     \"password\":\"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/sessions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"email\":\"jaka@mail.com\",\n     \"password\":\"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/sessions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"sessions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 03 Jun 2022 13:04:12 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "159"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"meta\": \"login success\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"jaka\",\n        \"occupation\": \"jakarta\",\n        \"email\": \"jaka@mail.com\",\n        \"token\": \"token123\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get accounts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1fQ.8cfLZ-lWx-zb7bP-dgSh03OoI4dafd3eHpXxVYEglNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/Users/faeshal/Desktop/Screen Shot 2022-06-03 at 1.36.41 PM.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users/fetch",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"fetch"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get accounts",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1fQ.8cfLZ-lWx-zb7bP-dgSh03OoI4dafd3eHpXxVYEglNo",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/Users/faeshal/Desktop/Screen Shot 2022-06-03 at 1.36.41 PM.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/fetch",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"fetch"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 11 Aug 2022 04:53:48 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "200"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"meta\": \"Successfuly fetch user data\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 19,\n        \"name\": \"zein\",\n        \"occupation\": \"jakarta\",\n        \"email\": \"zein@mail.com\",\n        \"token\": \"\",\n        \"image_url\": \"images/19-dummy.jpg\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "check email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"email\":\"jaka@mail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/email_checkers",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"email_checkers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "check email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"email\":\"jaka@mail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/email_checkers",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email_checkers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 11 Aug 2022 04:55:52 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "105"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"meta\": \"email has been registered\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"is_available\": false\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "upload avatar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1fQ.8cfLZ-lWx-zb7bP-dgSh03OoI4dafd3eHpXxVYEglNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/Users/faeshal/Desktop/Screen Shot 2022-06-03 at 1.36.41 PM.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/avatars",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"avatars"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "campaign",
+			"item": [
+				{
+					"name": "get campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/campaigns",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get campaigns",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/campaigns",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"campaigns"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Aug 2022 08:25:53 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "236"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"List of campaigns\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": [\n        {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"name\": \"villa bogor\",\n            \"short_description\": \"short desc\",\n            \"image_url\": \"\",\n            \"goal_amount\": 100000,\n            \"current_amount\": 20000,\n            \"slug\": \"villa-bogor-1\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "detail campaign",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/campaigns/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"campaigns",
+								"5"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "detail campaign",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/campaigns/1",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"campaigns",
+										"1"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Aug 2022 08:26:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "383"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Campaign detail\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"villa bogor\",\n        \"short_description\": \"short desc\",\n        \"description\": \"long desc\",\n        \"image_url\": \"\",\n        \"goal_amount\": 100000,\n        \"current_amount\": 20000,\n        \"backer_count\": 1,\n        \"user_id\": 1,\n        \"slug\": \"villa-bogor-1\",\n        \"perks\": [\n            \"passive income\",\n            \"free lunch\",\n            \"free parking\"\n        ],\n        \"user\": {\n            \"name\": \"faeshal\",\n            \"image_url\": \"\"\n        },\n        \"images\": []\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "create campaign",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"name\": \"villa bogor\",\n     \"description\": \"long desc\",\n     \"short_description\": \"short desc\",\n     \"goal_amount\":1000,\n     \"perks\": \"passive income,free lunch,free parking\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/campaigns",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create campaign",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"name\": \"villa bogor mumtaz\",\n     \"short_description\": \"camping ground\",\n     \"description\": \"family trip\",\n     \"goal_amount\": 1000,\n     \"perks\": \"passive income,free parking, free entry\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/campaigns",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"campaigns"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 05 Jun 2022 03:36:50 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "252"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"meta\": \"Success to create campaign\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 3,\n        \"user_id\": 1,\n        \"name\": \"villa bogor mumtaz\",\n        \"short_description\": \"camping ground\",\n        \"image_url\": \"\",\n        \"goal_amount\": 1000,\n        \"current_amount\": 0,\n        \"slug\": \"villa-bogor-mumtaz-1\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "update campaign",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"name\": \"villa jakarta\",\n     \"description\": \"long desc\",\n     \"short_description\": \"the jayakarta vila\",\n     \"goal_amount\":6000,\n     \"perks\": \"free dinner\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/campaigns/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"campaigns",
+								"5"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create campaign",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"name\": \"villa bogor mumtaz\",\n     \"short_description\": \"camping ground\",\n     \"description\": \"family trip\",\n     \"goal_amount\": 1000,\n     \"perks\": \"passive income,free parking, free entry\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/campaigns",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"campaigns"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 05 Jun 2022 03:36:50 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "252"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"meta\": \"Success to create campaign\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 3,\n        \"user_id\": 1,\n        \"name\": \"villa bogor mumtaz\",\n        \"short_description\": \"camping ground\",\n        \"image_url\": \"\",\n        \"goal_amount\": 1000,\n        \"current_amount\": 0,\n        \"slug\": \"villa-bogor-mumtaz-1\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "upload campaign image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1fQ.8cfLZ-lWx-zb7bP-dgSh03OoI4dafd3eHpXxVYEglNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/faeshal/Desktop/tes2.png"
+								},
+								{
+									"key": "campaign_id",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "is_primary",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/campaign-images",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"campaign-images"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "transaction",
+			"item": [
+				{
+					"name": "get transactions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/transactions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get transactions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/transactions",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Aug 2022 08:24:37 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "207"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"User's transactions\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": [\n        {\n            \"id\": 16,\n            \"amount\": 20000,\n            \"status\": \"paid\",\n            \"created_at\": \"2022-08-18T09:21:43Z\",\n            \"campaign\": {\n                \"name\": \"villa bogor\",\n                \"image_url\": \"\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "get campaign transaction (only campaign creator can see)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/campaigns/6/transactions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"campaigns",
+								"6",
+								"transactions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get campaign transaction",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/campaigns/1/transactions",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"campaigns",
+										"1",
+										"transactions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Aug 2022 08:36:39 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "235"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Campaign's transactions\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": [\n        {\n            \"id\": 17,\n            \"name\": \"zein\",\n            \"amount\": 20000,\n            \"created_at\": \"2022-08-19T08:25:23Z\"\n        },\n        {\n            \"id\": 16,\n            \"name\": \"zein\",\n            \"amount\": 20000,\n            \"created_at\": \"2022-08-18T09:21:43Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "get current user transactions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/transactions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get current user transactions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/transactions",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Aug 2022 08:25:14 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "207"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"User's transactions\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": [\n        {\n            \"id\": 16,\n            \"amount\": 20000,\n            \"status\": \"paid\",\n            \"created_at\": \"2022-08-18T09:21:43Z\",\n            \"campaign\": {\n                \"name\": \"villa bogor\",\n                \"image_url\": \"\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "create transaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"campaign_id\": 3,\n     \"amount\": \"100\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/transactions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create transaction",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"campaign_id\": 1,\n     \"amount\": 20000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/transactions",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Aug 2022 08:25:27 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "277"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"meta\": {\n        \"message\": \"Success to create transaction\",\n        \"code\": 200,\n        \"status\": \"success\"\n    },\n    \"data\": {\n        \"id\": 17,\n        \"campaign_id\": 1,\n        \"user_id\": 2,\n        \"amount\": 20000,\n        \"status\": \"pending\",\n        \"code\": \"\",\n        \"payment_url\": \"https://app.sandbox.midtrans.com/snap/v3/redirection/92a1d0be-7016-470c-8f25-7f22eafa9d2c\"\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
